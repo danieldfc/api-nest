@@ -2,18 +2,28 @@
 
 ## Pré-requisitos
 
+- [x] Testar localmente criação de usuários
+- [ ] Integrar com o TypeOrm:
+
+  - [ ] Usar postgres
+  - [ ] Criar Migrations
+  - [ ] Criar Entidades/Relacionamentos
+
 - [ ] Autenticação: somente usuários cadastrados podem acessar as rotas do API.
 
 - [ ] O sistema vai ter os seguintes modelos:
+
   - [ ] User (o usuário do sistema)
   - [ ] Role (um usuário pode ter 1 ou mais roles)
   - [ ] Permission (um role pode ter 1 ou mais permissões)
 
 - [ ] O sistema deveria ter os seguintes roles:
+
   - [ ] Administrator
   - [ ] User
 
 - [ ] O sistema deveria ter os seguintes permissions:
+
   - [ ] Read User (ambos os roles)
   - [ ] Create User (somente Administrator)
   - [ ] Update User (ambos os roles)
