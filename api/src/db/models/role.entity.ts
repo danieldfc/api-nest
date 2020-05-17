@@ -9,11 +9,11 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { User } from './user.entity';
-import { Permission } from './permission.entity';
+import User from './user.entity';
+import Permission from './permission.entity';
 
 @Entity('roles')
-export class Role {
+export default class Role {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -35,7 +35,7 @@ export class Role {
     { eager: true },
   )
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user: Promise<User>;
 
   @CreateDateColumn()
   created_at: Date;

@@ -2,15 +2,16 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 
+import UsersModule from './users/users.module';
+import RepoModule from './repo.module';
+import RepoService from './repo.service';
 import { AppService } from './app.service';
-
 import { AppController } from './app.controller';
-import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(), UsersModule],
+  imports: [UsersModule, RepoModule, TypeOrmModule.forRoot()],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [RepoService, AppService],
 })
 export class AppModule {
   constructor(private connection: Connection) {}

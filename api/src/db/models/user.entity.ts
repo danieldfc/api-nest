@@ -7,10 +7,10 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { Role } from './Role';
+import Role from './role.entity';
 
 @Entity('users')
-export class User {
+export default class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -27,7 +27,7 @@ export class User {
     () => Role,
     role => role.user,
   )
-  role: Role;
+  role: Promise<Role[]>;
 
   @CreateDateColumn()
   created_at: Date;

@@ -8,10 +8,10 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { Role } from './role.entity';
+import Role from './role.entity';
 
 @Entity('permissions')
-export class Permission {
+export default class Permission {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
