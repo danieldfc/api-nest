@@ -9,12 +9,12 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import User from './user.entity';
+import User from '../users/users.entity';
 import Permission from './permission.entity';
 
 @Entity('roles')
 export default class Role {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: string;
 
   @Column()

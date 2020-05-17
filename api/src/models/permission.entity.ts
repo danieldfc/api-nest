@@ -4,30 +4,30 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 import Role from './role.entity';
 
-@Entity('users')
-export default class User {
-  @PrimaryGeneratedColumn('uuid')
+@Entity('permissions')
+export default class Permission {
+  @PrimaryGeneratedColumn()
   id: string;
 
   @Column()
   name: string;
 
   @Column()
-  email: string;
+  role_id: string;
 
-  @Column()
-  password: string;
-
-  @OneToMany(
+  @ManyToOne(
     () => Role,
-    role => role.user,
+    role => role.permission,
+    { eager: true },
   )
-  role: Promise<Role[]>;
+  @JoinColumn({ name: 'role_id' })
+  role: Role;
 
   @CreateDateColumn()
   created_at: Date;

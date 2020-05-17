@@ -4,14 +4,13 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
-  JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
-import Role from './role.entity';
+import Role from '../models/role.entity';
 
-@Entity('permissions')
-export default class Permission {
+@Entity('users')
+export default class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -19,15 +18,16 @@ export default class Permission {
   name: string;
 
   @Column()
-  role_id: string;
+  email: string;
 
-  @ManyToOne(
+  @Column()
+  password: string;
+
+  @OneToMany(
     () => Role,
-    role => role.permission,
-    { eager: true },
+    role => role.user,
   )
-  @JoinColumn({ name: 'role_id' })
-  role: Role;
+  role: Promise<Role[]>;
 
   @CreateDateColumn()
   created_at: Date;
