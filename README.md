@@ -3,7 +3,7 @@
 ## Pré-requisitos
 
 - [x] Testar localmente criação de usuários
-- [ ] Integrar com o TypeOrm:
+- [x] Integrar com o TypeOrm:
 
   - [x] Usar postgres
   - [x] Criar Migrations

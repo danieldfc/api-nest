@@ -9,8 +9,8 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { User } from './User';
-import { Permission } from './Permission';
+import { User } from './user.entity';
+import { Permission } from './permission.entity';
 
 @Entity('roles')
 export class Role {

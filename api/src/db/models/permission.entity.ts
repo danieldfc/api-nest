@@ -8,7 +8,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { Role } from './Role';
+import { Role } from './role.entity';
 
 @Entity('permissions')
 export class Permission {
