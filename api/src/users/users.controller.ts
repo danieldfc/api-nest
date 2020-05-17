@@ -43,15 +43,16 @@ export default class UsersController {
   }
 
   @Put(':id')
-  async update(
-    @Param('id') id: string,
-    @Body('user') user: IRequest,
-  ): Promise<User> {
-    return this.usersService.save({ ...user, user_id: id });
+  async update(@Param('id') id: string, @Body() user: IRequest): Promise<User> {
+    const updateUser = await this.usersService.save({ ...user, user_id: id });
+
+    delete updateUser.password;
+
+    return updateUser;
   }
 
-  @Delete('users/:id')
+  @Delete(':id')
   async delete(@Param('id') id: number): Promise<void> {
-    this.usersService.delete(id);
+    await this.usersService.delete(id);
   }
 }

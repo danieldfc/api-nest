@@ -28,12 +28,14 @@ export default class UsersService {
   async findAll(): Promise<User[]> {
     return this.usersRepository.find({
       select: ['id', 'name', 'email', 'created_at', 'updated_at'],
-      take: 10,
     });
   }
 
   async findById(id: string): Promise<User | undefined> {
-    const userExist = await this.usersRepository.findOne(id);
+    const userExist = await this.usersRepository.findOne({
+      where: { id },
+      select: ['id', 'name', 'email', 'created_at', 'updated_at'],
+    });
 
     if (!userExist) {
       throw new NotFoundException('User not found');
@@ -69,7 +71,9 @@ export default class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    const duplicatedEmail = await this.usersRepository.findByEmail(email);
+    const duplicatedEmail = await this.usersRepository.findOne({
+      where: { email },
+    });
 
     if (duplicatedEmail && duplicatedEmail.id !== user_id) {
       throw new UnauthorizedException('E-mail is already in use.');
@@ -79,7 +83,7 @@ export default class UsersService {
     user.email = email;
 
     if (password && !old_password) {
-      throw new UnauthorizedException(
+      throw new BadRequestException(
         'You need to inform the old password to set a new password.',
       );
     }
@@ -94,9 +98,7 @@ export default class UsersService {
       user.password = await hash(password, 8);
     }
 
-    await this.usersRepository.update(user_id, user);
-
-    return user;
+    return this.usersRepository.save(user);
   }
 
   async delete(id: number): Promise<void> {
@@ -106,6 +108,6 @@ export default class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    await this.usersRepository.delete(userExist);
+    await this.usersRepository.delete(id);
   }
 }
