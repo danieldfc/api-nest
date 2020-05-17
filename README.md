@@ -5,9 +5,9 @@
 - [x] Testar localmente criação de usuários
 - [ ] Integrar com o TypeOrm:
 
-  - [ ] Usar postgres
-  - [ ] Criar Migrations
-  - [ ] Criar Entidades/Relacionamentos
+  - [x] Usar postgres
+  - [x] Criar Migrations
+  - [x] Criar Entidades/Relacionamentos
 
 - [ ] Autenticação: somente usuários cadastrados podem acessar as rotas do API.
 
