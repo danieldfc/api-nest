@@ -9,7 +9,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import User from '../users/users.entity';
+import User from '../users.entity';
 import Permission from './permission.entity';
 
 @Entity('roles')
@@ -31,7 +31,7 @@ export default class Role {
 
   @ManyToOne(
     () => User,
-    user => user.role,
+    user => user.roles,
     { eager: true },
   )
   @JoinColumn({ name: 'user_id' })

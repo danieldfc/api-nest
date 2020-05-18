@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import Role from '../models/role.entity';
+import Role from './shared/role.entity';
 
 @Entity('users')
 export default class User {
@@ -25,9 +25,9 @@ export default class User {
 
   @OneToMany(
     () => Role,
-    role => role.user,
+    roles => roles.user,
   )
-  role: Promise<Role[]>;
+  roles: Promise<Role[]>;
 
   @CreateDateColumn()
   created_at: Date;

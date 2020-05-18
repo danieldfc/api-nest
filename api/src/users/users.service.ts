@@ -44,6 +44,18 @@ export default class UsersService {
     return userExist;
   }
 
+  async findByEmail(email: string): Promise<User | undefined> {
+    const userExist = await this.usersRepository.findOne({
+      where: { email },
+    });
+
+    if (!userExist) {
+      throw new NotFoundException('User not found');
+    }
+
+    return userExist;
+  }
+
   async create(user: ICreateUserDTO): Promise<User> {
     const userExist = await this.usersRepository.findOne({
       where: { email: user.email },

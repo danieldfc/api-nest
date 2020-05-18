@@ -13,7 +13,7 @@
 
 - [ ] O sistema vai ter os seguintes modelos:
 
-  - [ ] User (o usuário do sistema)
+  - [x] User (o usuário do sistema)
   - [ ] Role (um usuário pode ter 1 ou mais roles)
   - [ ] Permission (um role pode ter 1 ou mais permissões)
 
