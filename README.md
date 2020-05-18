@@ -9,13 +9,13 @@
   - [x] Criar Migrations
   - [x] Criar Entidades/Relacionamentos
 
-- [ ] Autenticação: somente usuários cadastrados podem acessar as rotas do API.
+- [x] Autenticação: somente usuários cadastrados podem acessar as rotas do API.
 
-- [ ] O sistema vai ter os seguintes modelos:
+- [x] O sistema vai ter os seguintes modelos:
 
   - [x] User (o usuário do sistema)
-  - [ ] Role (um usuário pode ter 1 ou mais roles)
-  - [ ] Permission (um role pode ter 1 ou mais permissões)
+  - [x] Role (um usuário pode ter 1 ou mais roles)
+  - [x] Permission (um role pode ter 1 ou mais permissões)
 
 - [ ] O sistema deveria ter os seguintes roles:
 
@@ -34,3 +34,35 @@
   - [ ] Show an existing user (somente quem tem o permission Read User)
   - [ ] Edit an existing user (somente quem tem o permission Update User)
   - [ ] Delete an existing user (somente quem tem o permission Delete User)
+
+## Starting
+
+- Importe o arquivo `api/insomnia.json` no [Insomnia](https://insomnia.rest/)
+
+### Scripts
+
+Comece a aplicação uma única vez.
+
+```sh
+$ nest start
+```
+
+Comece a aplicação, que irá estar assistindo a todas as alterações.
+
+```sh
+$ nest start:dev
+```
+
+Debugue a aplicação.
+
+```sh
+$ nest start:debug
+```
+
+Crie uma versão em produção.
+
+```sh
+$ nest start:prod
+```
+
+Production by [Daniel Felizardo](https://github.com/danieldfc) 🚀

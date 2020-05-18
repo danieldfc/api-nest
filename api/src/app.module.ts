@@ -1,8 +1,8 @@
-import AuthModule from './auth/auth.module';
-import { Connection } from 'typeorm';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Connection } from 'typeorm';
 
+import AuthModule from './auth/auth.module';
 import UsersModule from './users/users.module';
 
 import { AppController } from './app.controller';
