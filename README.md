@@ -1,3 +1,7 @@
+<p align="center">
+<a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+<p>
+
 # API-NEST
 
 ## Pré-requisitos
@@ -35,14 +39,16 @@
   - [ ] Edit an existing user (somente quem tem o permission Update User)
   - [ ] Delete an existing user (somente quem tem o permission Delete User)
 
-## Starting
+## :zap: Starting
 
 - Importe o arquivo `api/insomnia.json` no [Insomnia](https://insomnia.rest/).
 - Verifique o arquivo `api/ormconfig.json`, que é a configuração do banco de dados.
 - Após criar o banco de dados `nest-api`, utilizando o `postgres`.
-- Instale as dependências do projeto na pasta `api`, execute `yarn` no seu terminal.
+- Instale as dependências do projeto na pasta `api`, executando `yarn` no seu terminal.
+- Crie um arquivo `api/.env`, copie do `api/.env.example` o seu conteúdo para o arquivo criado.
+- Crie um [hash](http://www.md5.cz/) para a secretKey da aplicação e altere a chave `APP_SECRET=`, para `APP_SECRET='hashCriado'`
 
-### Scripts
+### :bash: Scripts
 
 **Entre na pasta `api`, para poder executar estes comandos.**
 
