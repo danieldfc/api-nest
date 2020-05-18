@@ -37,9 +37,14 @@
 
 ## Starting
 
-- Importe o arquivo `api/insomnia.json` no [Insomnia](https://insomnia.rest/)
+- Importe o arquivo `api/insomnia.json` no [Insomnia](https://insomnia.rest/).
+- Verifique o arquivo `api/ormconfig.json`, que é a configuração do banco de dados.
+- Após criar o banco de dados `nest-api`, utilizando o `postgres`.
+- Instale as dependências do projeto na pasta `api`, execute `yarn` no seu terminal.
 
 ### Scripts
+
+**Entre na pasta `api`, para poder executar estes comandos.**
 
 Comece a aplicação uma única vez.
 
