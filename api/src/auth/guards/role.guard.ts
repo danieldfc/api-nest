@@ -16,6 +16,4 @@ export default class RolesGuard implements CanActivate {
     // return this.matchRoles(roles, user.roles);
     return true;
   }
-
-  // matchRoles(roles: string[], userRoles: string[]): boolean {}
 }

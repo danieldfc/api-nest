@@ -15,11 +15,11 @@
 
 - [x] Autenticação: somente usuários cadastrados podem acessar as rotas do API.
 
-- [ ] O sistema vai ter os seguintes modelos:
+- [x] O sistema vai ter os seguintes modelos:
 
   - [x] User (o usuário do sistema)
-  - [ ] Role (uma ou mais usuários pode ter 1 ou mais roles)
-  - [ ] Permission (uma ou mais roles pode ter 1 ou mais permissões)
+  - [x] Role (uma ou mais usuários pode ter 1 ou mais roles)
+  - [x] Permission (uma ou mais roles pode ter 1 ou mais permissões)
 
 - [x] O sistema deveria ter os seguintes roles:
 
@@ -40,12 +40,12 @@
   - [ ] Edit an existing user (somente quem tem o permission Update User)
   - [ ] Delete an existing user (somente quem tem o permission Delete User)
 
-- [] Adicionais para manter roles e permissões (somente Administrator):
+- [x] Adicionais para manter roles e permissões (somente Administrator):
 
-  - [] Create a new role and permissions
-  - [] Edit an existing role and permissions
-  - [] Show an existing role and permissions
-  - [] Delete an existing role and permissions
+  - [x] Create a new role and permissions
+  - [x] Edit an existing role and permissions
+  - [x] Show an existing role and permissions
+  - [x] Delete an existing role and permissions
 
 ## :zap: Starting
 

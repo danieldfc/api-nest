@@ -24,9 +24,6 @@ export default class Permission {
   @Column()
   description: string;
 
-  @Column()
-  role_id: string;
-
   @ManyToMany(
     () => User,
     user => user.permissions,

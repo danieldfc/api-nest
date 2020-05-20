@@ -7,12 +7,10 @@ import UsersService from './users.service';
 import UsersController from './users.controller';
 
 import User from '../entities/user.entity';
-import Role from '../entities/role.entity';
-import Permission from '../entities/permission.entity';
 
 @Module({
   providers: [...UsersProvider, UsersService],
-  imports: [TypeOrmModule.forFeature([User, Role, Permission]), DatabaseModule],
+  imports: [TypeOrmModule.forFeature([User]), DatabaseModule],
   controllers: [UsersController],
   exports: [UsersService],
 })

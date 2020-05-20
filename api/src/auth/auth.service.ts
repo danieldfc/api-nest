@@ -5,13 +5,20 @@ import { JwtService } from '@nestjs/jwt';
 import UserService from '../users/users.service';
 import User from '../entities/user.entity';
 
-interface IValidateUser {
+import IAuthService from './models/IAuthService';
+import { IRequestPayload } from './strategies/jwt.strategy';
+
+export interface IValidateUser {
   email: string;
   password: string;
 }
 
+export interface IAccessToken {
+  access_token: string;
+}
+
 @Injectable()
-export default class AuthService {
+export default class AuthService implements IAuthService {
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
@@ -31,7 +38,7 @@ export default class AuthService {
     return user;
   }
 
-  async login({ id: sub }: any) {
+  async login({ sub }: IRequestPayload): Promise<IAccessToken> {
     return {
       access_token: this.jwtService.sign({ sub }),
     };

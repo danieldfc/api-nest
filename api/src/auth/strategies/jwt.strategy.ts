@@ -8,10 +8,10 @@ import AuthService from '../auth.service';
 import jwtConstants from '../config/constants';
 
 interface IPayloadValidate {
-  id: string;
+  sub: string;
 }
 
-interface IRequestPayload {
+export interface IRequestPayload {
   sub: string;
   name: string;
   iat: number;
@@ -27,7 +27,7 @@ export default class JWTStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate({ sub: id }: IRequestPayload): Promise<IPayloadValidate> {
-    return { id };
+  async validate({ sub }: IRequestPayload): Promise<IPayloadValidate> {
+    return { sub };
   }
 }

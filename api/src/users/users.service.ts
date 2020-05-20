@@ -9,9 +9,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import UsersRepository from './users.repository';
 import ICreateUserDTO from './dtos/ICreateUserDTO';
 import User from '../entities/user.entity';
-// import RoleRepository from './shared/role.repository';
+import IUserService from './models/IUserService';
 
-interface IRequest {
+export interface IRequestUpdateProfile {
   user_id: string;
   name: string;
   email: string;
@@ -20,12 +20,11 @@ interface IRequest {
 }
 
 @Injectable()
-export default class UsersService {
+export default class UsersService implements IUserService {
   constructor(
     @InjectRepository(UsersRepository)
-    private readonly usersRepository: UsersRepository, // @InjectRepository(RoleRepository)
-  ) // private readonly roleRepository: RoleRepository,
-  {}
+    private readonly usersRepository: UsersRepository,
+  ) {}
 
   async findAll(): Promise<User[]> {
     return this.usersRepository.find({
@@ -33,7 +32,7 @@ export default class UsersService {
     });
   }
 
-  async findById(id: string): Promise<User | undefined> {
+  async findById(id: string): Promise<User> {
     const userExist = await this.usersRepository.findOne({
       where: { id },
       select: ['id', 'name', 'email', 'created_at', 'updated_at'],
@@ -46,7 +45,7 @@ export default class UsersService {
     return userExist;
   }
 
-  async findByEmail(email: string): Promise<User | undefined> {
+  async findByEmail(email: string): Promise<User> {
     const userExist = await this.usersRepository.findOne({
       where: { email },
     });
@@ -69,12 +68,12 @@ export default class UsersService {
 
     user.password = await hash(user.password, 8);
 
-    const { name, email, password } = user;
-
-    const createUser = this.usersRepository.create({ name, email, password });
+    const createUser = this.usersRepository.create(user);
+    // console.log(createUser.);
     // const roles = this.roleRepository.save({ user: createUser, type:  });
+    const savedUser = await this.usersRepository.save(createUser);
 
-    return await this.usersRepository.save(createUser);
+    return savedUser;
   }
 
   async save({
@@ -83,7 +82,7 @@ export default class UsersService {
     name,
     old_password,
     password,
-  }: IRequest): Promise<User> {
+  }: IRequestUpdateProfile): Promise<User> {
     const user = await this.usersRepository.findOne(user_id);
 
     if (!user) {
@@ -120,7 +119,7 @@ export default class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     const userExist = await this.usersRepository.findOne(id);
 
     if (!userExist) {

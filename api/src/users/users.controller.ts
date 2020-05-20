@@ -30,7 +30,7 @@ export default class UsersController {
   constructor(@Inject('UsersService') private usersService: UsersService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Roles(ConstantsRoles.User, ConstantsRoles.Administrator)
+  // @Roles(ConstantsRoles.User, ConstantsRoles.Administrator)
   @Get()
   async index(): Promise<User[]> {
     return this.usersService.findAll();
@@ -44,7 +44,7 @@ export default class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Roles(ConstantsRoles.Administrator)
+  // @Roles(ConstantsRoles.Administrator)
   @Post()
   async create(@Body() user: ICreateUserDTO): Promise<User> {
     const createUser = await this.usersService.create(user);
