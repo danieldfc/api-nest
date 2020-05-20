@@ -4,11 +4,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
-  JoinColumn,
+  ManyToMany,
 } from 'typeorm';
 
 import Role from './role.entity';
+import User from './user.entity';
 
 @Entity('permissions')
 export default class Permission {
@@ -19,15 +19,25 @@ export default class Permission {
   name: string;
 
   @Column()
+  slug: string;
+
+  @Column()
+  description: string;
+
+  @Column()
   role_id: string;
 
-  @ManyToOne(
-    () => Role,
-    role => role.permission,
-    { eager: true },
+  @ManyToMany(
+    () => User,
+    user => user.permissions,
   )
-  @JoinColumn({ name: 'role_id' })
-  role: Role;
+  users: User[];
+
+  @ManyToMany(
+    () => Role,
+    role => role.permissions,
+  )
+  roles: Role[];
 
   @CreateDateColumn()
   created_at: Date;

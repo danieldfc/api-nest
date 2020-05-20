@@ -4,10 +4,12 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
+  JoinTable,
+  ManyToMany,
 } from 'typeorm';
 
-import Role from './shared/role.entity';
+import Role from './role.entity';
+import Permission from './permission.entity';
 
 @Entity('users')
 export default class User {
@@ -23,11 +25,19 @@ export default class User {
   @Column()
   password: string;
 
-  @OneToMany(
+  @ManyToMany(
     () => Role,
-    roles => roles.user,
+    role => role.users,
   )
-  roles: Promise<Role[]>;
+  @JoinTable()
+  roles: Role[];
+
+  @ManyToMany(
+    () => Permission,
+    permission => permission.users,
+  )
+  @JoinTable()
+  permissions: Permission[];
 
   @CreateDateColumn()
   created_at: Date;

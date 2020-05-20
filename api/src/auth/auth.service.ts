@@ -3,7 +3,7 @@ import { compare } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 
 import UserService from '../users/users.service';
-import User from '../users/users.entity';
+import User from '../entities/user.entity';
 
 interface IValidateUser {
   email: string;
