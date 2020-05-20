@@ -20,15 +20,15 @@ export default class AuthService {
   async validateUser({ email, password }: IValidateUser): Promise<User | null> {
     const user = await this.usersService.findByEmail(email);
 
+    if (!user) return null;
+
     const compareHash = await compare(password, user.password);
 
-    if (user && compareHash) {
-      delete user.password;
+    if (!compareHash) return null;
 
-      return user;
-    }
+    delete user.password;
 
-    return null;
+    return user;
   }
 
   async login({ id: sub }: any) {

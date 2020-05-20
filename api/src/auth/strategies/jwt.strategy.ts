@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 
-import AuthService from './auth.service';
-// import User from '../users/users.entity';
+import AuthService from '../auth.service';
+// import User from '../../entities/user.entity';
 
-import jwtConstants from './config/constants';
+import jwtConstants from '../config/constants';
 
 interface IPayloadValidate {
   id: string;

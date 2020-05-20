@@ -8,7 +8,8 @@ import { hash, compare } from 'bcryptjs';
 import { InjectRepository } from '@nestjs/typeorm';
 import UsersRepository from './users.repository';
 import ICreateUserDTO from './dtos/ICreateUserDTO';
-import User from './users.entity';
+import User from '../entities/user.entity';
+// import RoleRepository from './shared/role.repository';
 
 interface IRequest {
   user_id: string;
@@ -22,8 +23,9 @@ interface IRequest {
 export default class UsersService {
   constructor(
     @InjectRepository(UsersRepository)
-    private readonly usersRepository: UsersRepository,
-  ) {}
+    private readonly usersRepository: UsersRepository, // @InjectRepository(RoleRepository)
+  ) // private readonly roleRepository: RoleRepository,
+  {}
 
   async findAll(): Promise<User[]> {
     return this.usersRepository.find({
@@ -67,7 +69,12 @@ export default class UsersService {
 
     user.password = await hash(user.password, 8);
 
-    return await this.usersRepository.save(user);
+    const { name, email, password } = user;
+
+    const createUser = this.usersRepository.create({ name, email, password });
+    // const roles = this.roleRepository.save({ user: createUser, type:  });
+
+    return await this.usersRepository.save(createUser);
   }
 
   async save({

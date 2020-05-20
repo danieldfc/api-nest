@@ -1,7 +1,7 @@
 const constants = {
   jwt: {
-    secret: '603a63939bc626ef536bfd94c914dba0',
-    expiriesIn: '1d',
+    secret: process.env.APP_SECRET,
+    expiresIn: '1d',
   },
 };
 

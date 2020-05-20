@@ -1,5 +1,5 @@
 import { Connection } from 'typeorm';
-import User from './users.entity';
+import User from '../entities/user.entity';
 
 import Constants from '../config/constants';
 

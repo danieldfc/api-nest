@@ -15,16 +15,16 @@
 
 - [x] Autenticação: somente usuários cadastrados podem acessar as rotas do API.
 
-- [x] O sistema vai ter os seguintes modelos:
+- [ ] O sistema vai ter os seguintes modelos:
 
   - [x] User (o usuário do sistema)
-  - [x] Role (um usuário pode ter 1 ou mais roles)
-  - [x] Permission (um role pode ter 1 ou mais permissões)
+  - [ ] Role (uma ou mais usuários pode ter 1 ou mais roles)
+  - [ ] Permission (uma ou mais roles pode ter 1 ou mais permissões)
 
-- [ ] O sistema deveria ter os seguintes roles:
+- [x] O sistema deveria ter os seguintes roles:
 
-  - [ ] Administrator
-  - [ ] User
+  - [x] Administrator
+  - [x] User
 
 - [ ] O sistema deveria ter os seguintes permissions:
 
@@ -34,10 +34,18 @@
   - [ ] Delete User (somente Administrator)
 
 - [ ] O API deve ter todas as rotas para manter usuários:
+
   - [ ] Create a new user (somente quem tem o permission Create User)
   - [ ] Show an existing user (somente quem tem o permission Read User)
   - [ ] Edit an existing user (somente quem tem o permission Update User)
   - [ ] Delete an existing user (somente quem tem o permission Delete User)
+
+- [] Adicionais para manter roles e permissões (somente Administrator):
+
+  - [] Create a new role and permissions
+  - [] Edit an existing role and permissions
+  - [] Show an existing role and permissions
+  - [] Delete an existing role and permissions
 
 ## :zap: Starting
 
@@ -48,7 +56,7 @@
 - Crie um arquivo `api/.env`, copie do `api/.env.example` o seu conteúdo para o arquivo criado.
 - Crie um [hash](http://www.md5.cz/) para a secretKey da aplicação e altere a chave `APP_SECRET=`, para `APP_SECRET='hashCriado'`
 
-### :bash: Scripts
+### :crossed_flags: Scripts
 
 **Entre na pasta `api`, para poder executar estes comandos.**
 

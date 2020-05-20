@@ -10,11 +10,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import UsersService from './users.service';
-import User from './users.entity';
-import ICreateUserDTO from './dtos/ICreateUserDTO';
-import JwtAuthGuard from '../auth/jwt-guard.guard';
+import User from '../entities/user.entity';
+import JwtAuthGuard from '../auth/guards/jwt-auth.guard';
 
-interface IRequest {
+import Roles, { ConstantsRoles } from '../auth/decorators/roles.decorator';
+import RolesGuard from '../auth/guards/role.guard';
+import ICreateUserDTO from './dtos/ICreateUserDTO';
+
+interface IRequestUpdateUser {
   name: string;
   email: string;
   old_password?: string;
@@ -22,22 +25,26 @@ interface IRequest {
 }
 
 @Controller('users')
+@UseGuards(RolesGuard)
 export default class UsersController {
   constructor(@Inject('UsersService') private usersService: UsersService) {}
 
   @UseGuards(JwtAuthGuard)
+  @Roles(ConstantsRoles.User, ConstantsRoles.Administrator)
   @Get()
   async index(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @UseGuards(JwtAuthGuard)
+  @Roles(ConstantsRoles.User, ConstantsRoles.Administrator)
   @Get(':id')
   async show(@Param('id') id: string): Promise<User> {
     return this.usersService.findById(id);
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
+  @Roles(ConstantsRoles.Administrator)
   @Post()
   async create(@Body() user: ICreateUserDTO): Promise<User> {
     const createUser = await this.usersService.create(user);
@@ -48,8 +55,12 @@ export default class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Roles(ConstantsRoles.User, ConstantsRoles.Administrator)
   @Put(':id')
-  async update(@Param('id') id: string, @Body() user: IRequest): Promise<User> {
+  async update(
+    @Param('id') id: string,
+    @Body() user: IRequestUpdateUser,
+  ): Promise<User> {
     const updateUser = await this.usersService.save({ ...user, user_id: id });
 
     delete updateUser.password;
@@ -58,6 +69,7 @@ export default class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Roles(ConstantsRoles.Administrator)
   @Delete(':id')
   async delete(@Param('id') id: number): Promise<void> {
     await this.usersService.delete(id);
