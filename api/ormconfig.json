@@ -6,8 +6,8 @@
   "password": "docker",
   "database": "nest-api",
   "entities": ["dist/**/*.entity.js"],
-  "migrations": ["src/db/migrations/*.ts"],
+  "migrations": ["src/database/migrations/*.ts"],
   "cli": {
-    "migrationsDir": ["src/db/migrations"]
+    "migrationsDir": ["src/database/migrations"]
   }
 }
