@@ -8,6 +8,7 @@ import {
   Inject,
   Body,
   Param,
+  Patch,
 } from '@nestjs/common';
 import JwtAuthGuard from 'src/auth/guards/jwt-auth.guard';
 
@@ -44,6 +45,18 @@ export class RoleController {
     return this.roleService.save({
       role_id,
       ...role,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id')
+  async updatePermissions(
+    @Param('id') role_id: string,
+    @Body('permissions') permissions: string[],
+  ) {
+    return this.roleService.updatePermissionsOfRole({
+      role_id,
+      permissions,
     });
   }
 

@@ -1,19 +1,33 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+
+import matchRoles from '../middlewares/match-roles.middleware';
+import { InjectRepository } from '@nestjs/typeorm';
+import UserRepository from 'src/users/users.repository';
 
 @Injectable()
 export default class RolesGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    @InjectRepository(UserRepository)
+    private userRespository: UserRepository,
+    private reflector: Reflector,
+  ) {}
 
-  canActivate(context: ExecutionContext): boolean {
-    const roles =
-      this.reflector.get<string[]>('roles', context.getHandler()) || [];
-    const request = context.switchToHttp().getRequest();
-    if (!roles) return false;
-
+  async canActivate(context: ExecutionContext) {
+    const roles = this.reflector.get<string[]>('roles', context.getHandler());
+    const request = await context.switchToHttp().getRequest();
     const { user } = request;
 
-    // return this.matchRoles(roles, user.roles);
-    return true;
+    if (user && user.roles) {
+      return true;
+    }
+
+    throw new HttpException('UNAUTHORIZED access', HttpStatus.UNAUTHORIZED);
   }
 }

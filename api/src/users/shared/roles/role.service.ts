@@ -7,12 +7,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import ICreateRoleDTO from './dtos/ICreateRoleDTO';
 import RoleRepository from './role.repository';
 import Role from 'src/entities/role.entity';
+import PermissionRepository from '../permissions/permission.repository';
 
 export interface IRequestUpdateRole {
   name: string;
   slug: string;
   description: string;
   role_id: string;
+  permissions: string[];
+}
+
+export interface IRequestPatchPermission {
+  role_id: string;
+  permissions: string[];
 }
 
 @Injectable()
@@ -20,10 +27,14 @@ export class RoleService {
   constructor(
     @InjectRepository(RoleRepository)
     private roleRepository: RoleRepository,
+    @InjectRepository(PermissionRepository)
+    private permissionRepository: PermissionRepository,
   ) {}
 
   async findAll(): Promise<Role[]> {
-    return this.roleRepository.find();
+    return this.roleRepository.find({
+      relations: ['permissions'],
+    });
   }
 
   async findBySlug(slug: string): Promise<Role> {
@@ -40,7 +51,12 @@ export class RoleService {
     return role;
   }
 
-  async create({ name, slug, description }: ICreateRoleDTO): Promise<Role> {
+  async create({
+    name,
+    slug,
+    description,
+    permissions,
+  }: ICreateRoleDTO): Promise<Role> {
     const existingRole = await this.roleRepository.findOne({
       where: {
         name,
@@ -57,7 +73,33 @@ export class RoleService {
       description,
     });
 
+    const findPermission = await this.permissionRepository.findByIds(
+      permissions,
+    );
+    console.log(findPermission);
+
+    role.permissions = findPermission;
+
     return this.roleRepository.save(role);
+  }
+
+  async updatePermissionsOfRole({
+    role_id,
+    permissions,
+  }: IRequestPatchPermission): Promise<Role> {
+    const role = await this.roleRepository.findOne(role_id);
+
+    if (!role) {
+      throw new NotFoundException('Role not found');
+    }
+
+    const findPermissions = await this.permissionRepository.findByIds(
+      permissions,
+    );
+
+    role.permissions = findPermissions;
+
+    return await this.roleRepository.save(role);
   }
 
   async save({
@@ -65,6 +107,7 @@ export class RoleService {
     name,
     slug,
     description,
+    permissions,
   }: IRequestUpdateRole): Promise<Role> {
     const role = await this.roleRepository.findOne(role_id);
 
@@ -73,9 +116,9 @@ export class RoleService {
     }
 
     if (
-      (role && role.slug !== slug) ||
-      role.name === name ||
-      role.description === description
+      (role && role.name !== name) ||
+      role.description !== description ||
+      role.slug !== slug
     ) {
       const checkRole = await this.roleRepository.findOne({
         where: {
@@ -90,9 +133,14 @@ export class RoleService {
       }
     }
 
+    const findPermissions = await this.permissionRepository.findByIds(
+      permissions,
+    );
+
     role.name = name;
     role.slug = slug;
     role.description = description;
+    role.permissions = findPermissions;
 
     return this.roleRepository.save(role);
   }

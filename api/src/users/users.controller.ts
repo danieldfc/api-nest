@@ -30,10 +30,10 @@ export default class UsersController {
   constructor(@Inject('UsersService') private usersService: UsersService) {}
 
   @UseGuards(JwtAuthGuard)
-  // @Roles(ConstantsRoles.User, ConstantsRoles.Administrator)
+  @Roles(ConstantsRoles.User, ConstantsRoles.Administrator)
   @Get()
-  async index(): Promise<User[]> {
-    return this.usersService.findAll();
+  async index(): Promise<void> {
+    // return this.usersService.findAll();
   }
 
   @UseGuards(JwtAuthGuard)
@@ -44,7 +44,7 @@ export default class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  // @Roles(ConstantsRoles.Administrator)
+  @Roles(ConstantsRoles.Administrator)
   @Post()
   async create(@Body() user: ICreateUserDTO): Promise<User> {
     const createUser = await this.usersService.create(user);
@@ -71,7 +71,7 @@ export default class UsersController {
   @UseGuards(JwtAuthGuard)
   @Roles(ConstantsRoles.Administrator)
   @Delete(':id')
-  async delete(@Param('id') id: number): Promise<void> {
+  async delete(@Param('id') id: string): Promise<void> {
     await this.usersService.delete(id);
   }
 }

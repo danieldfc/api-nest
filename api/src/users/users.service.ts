@@ -3,6 +3,8 @@ import {
   UnauthorizedException,
   NotFoundException,
   BadRequestException,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { hash, compare } from 'bcryptjs';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,6 +12,7 @@ import UsersRepository from './users.repository';
 import ICreateUserDTO from './dtos/ICreateUserDTO';
 import User from '../entities/user.entity';
 import IUserService from './models/IUserService';
+import ILoginDTO from './dtos/IloginDTO';
 
 export interface IRequestUpdateProfile {
   user_id: string;
@@ -30,6 +33,20 @@ export default class UsersService implements IUserService {
     return this.usersRepository.find({
       select: ['id', 'name', 'email', 'created_at', 'updated_at'],
     });
+  }
+
+  async findByLogin({ email, password }: ILoginDTO) {
+    const user = await this.usersRepository.findOne({ where: { email } });
+
+    if (!user) {
+      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+    }
+
+    if (!(await compare(password, user.password))) {
+      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+    }
+
+    return user;
   }
 
   async findById(id: string): Promise<User> {

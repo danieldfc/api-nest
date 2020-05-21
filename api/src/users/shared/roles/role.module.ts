@@ -7,9 +7,10 @@ import { DatabaseModule } from 'src/database/database.module';
 import RoleProvider from './role.providers';
 
 import Role from 'src/entities/role.entity';
+import Permission from 'src/entities/permission.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Role]), DatabaseModule],
+  imports: [TypeOrmModule.forFeature([Role, Permission]), DatabaseModule],
   controllers: [RoleController],
   providers: [...RoleProvider, RoleService],
   exports: [RoleService],
