@@ -9,10 +9,15 @@ import {
   Put,
   Param,
 } from '@nestjs/common';
+
 import { PermissionService } from './permission.service';
+
+import Roles, { ConstantsRoles } from 'src/auth/decorators/roles.decorator';
+import RolesGuard from 'src/auth/guards/role.guard';
 import JwtAuthGuard from 'src/auth/guards/jwt-auth.guard';
-import Permission from 'src/entities/permission.entity';
 import ICreatePermissionDTO from './dtos/ICreatePermissionDTO';
+
+import Permission from 'src/entities/permission.entity';
 
 @Controller('admin/permissions')
 export class PermissionController {
@@ -20,25 +25,29 @@ export class PermissionController {
     @Inject('PermissionService') private permissionService: PermissionService,
   ) {}
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(ConstantsRoles.Administrator)
   @Get()
   async index(): Promise<Permission[]> {
     return this.permissionService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get(':slug')
-  async show(@Param('slug') slug: string): Promise<Permission> {
-    return this.permissionService.findBySlug(slug);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(ConstantsRoles.Administrator)
+  @Get(':id')
+  async show(@Param('id') id: string): Promise<Permission> {
+    return this.permissionService.findById(id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(ConstantsRoles.Administrator)
   @Post()
   async create(@Body() permission: ICreatePermissionDTO): Promise<Permission> {
     return this.permissionService.create(permission);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(ConstantsRoles.Administrator)
   @Put(':id')
   async update(
     @Param('id') permission_id: string,
@@ -47,7 +56,8 @@ export class PermissionController {
     return this.permissionService.save({ permission_id, ...permission });
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(ConstantsRoles.Administrator)
   @Delete(':id')
   async delete(@Param('id') permission_id: string): Promise<void> {
     return this.permissionService.delete(permission_id);

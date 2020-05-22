@@ -1,6 +1,6 @@
 import { Connection } from 'typeorm';
-import Permission from 'src/entities/permission.entity';
 
+import Permission from 'src/entities/permission.entity';
 import Constants from 'src/config/constants';
 
 const PermissionsProvider = [

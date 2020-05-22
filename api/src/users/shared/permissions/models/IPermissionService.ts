@@ -5,8 +5,8 @@ import { IRequestUpdatePermission } from '../permission.service';
 
 export default interface IPermissionService {
   findAll(): Promise<Permission[]>;
-  findBySlug(slug: string): Promise<Permission>;
+  findById(id: string): Promise<Permission>;
   create(data: ICreatePermissionDTO): Promise<Permission>;
-  save(permissionUpdate: IRequestUpdatePermission): Promise<Permission>;
+  save(data: IRequestUpdatePermission): Promise<Permission>;
   delete(permission_id: string): Promise<void>;
 }

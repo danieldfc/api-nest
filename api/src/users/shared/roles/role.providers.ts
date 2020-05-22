@@ -1,6 +1,6 @@
 import { Connection } from 'typeorm';
-import Role from 'src/entities/role.entity';
 
+import Role from 'src/entities/role.entity';
 import Constants from 'src/config/constants';
 
 const RolesProvider = [

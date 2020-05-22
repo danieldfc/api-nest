@@ -26,19 +26,19 @@
   - [x] Administrator
   - [x] User
 
-- [ ] O sistema deveria ter os seguintes permissions:
+- [x] O sistema deveria ter os seguintes permissions:
 
-  - [ ] Read User (ambos os roles)
-  - [ ] Create User (somente Administrator)
-  - [ ] Update User (ambos os roles)
-  - [ ] Delete User (somente Administrator)
+  - [x] Read User (ambos os roles)
+  - [x] Create User (somente Administrator)
+  - [x] Update User (ambos os roles)
+  - [x] Delete User (somente Administrator)
 
-- [ ] O API deve ter todas as rotas para manter usuários:
+- [x] O API deve ter todas as rotas para manter usuários:
 
-  - [ ] Create a new user (somente quem tem o permission Create User)
-  - [ ] Show an existing user (somente quem tem o permission Read User)
-  - [ ] Edit an existing user (somente quem tem o permission Update User)
-  - [ ] Delete an existing user (somente quem tem o permission Delete User)
+  - [x] Create a new user (somente quem tem o permission Create User)
+  - [x] Show an existing user (somente quem tem o permission Read User)
+  - [x] Edit an existing user (somente quem tem o permission Update User)
+  - [x] Delete an existing user (somente quem tem o permission Delete User)
 
 - [x] Adicionais para manter roles e permissões (somente Administrator):
 

@@ -6,9 +6,10 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 
 import PermissionRepository from './permission.repository';
-import Permission from 'src/entities/permission.entity';
-import ICreatePermissionDTO from './dtos/ICreatePermissionDTO';
 import IPermissionService from './models/IPermissionService';
+import ICreatePermissionDTO from './dtos/ICreatePermissionDTO';
+
+import Permission from 'src/entities/permission.entity';
 
 export interface IRequestUpdatePermission {
   name: string;
@@ -28,12 +29,8 @@ export class PermissionService implements IPermissionService {
     return this.permissionRepository.find();
   }
 
-  async findBySlug(slug: string): Promise<Permission> {
-    const permission = await this.permissionRepository.findOne({
-      where: {
-        slug,
-      },
-    });
+  async findById(id: string): Promise<Permission> {
+    const permission = await this.permissionRepository.findOne(id);
 
     if (!permission) {
       throw new BadRequestException('Permission not found');

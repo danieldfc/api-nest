@@ -4,10 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import ICreateRoleDTO from './dtos/ICreateRoleDTO';
+
 import RoleRepository from './role.repository';
-import Role from 'src/entities/role.entity';
 import PermissionRepository from '../permissions/permission.repository';
+
+import ICreateRoleDTO from './dtos/ICreateRoleDTO';
+import Role from 'src/entities/role.entity';
 
 export interface IRequestUpdateRole {
   name: string;
@@ -76,7 +78,6 @@ export class RoleService {
     const findPermission = await this.permissionRepository.findByIds(
       permissions,
     );
-    console.log(findPermission);
 
     role.permissions = findPermission;
 

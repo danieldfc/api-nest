@@ -1,4 +1,5 @@
 import { Repository, EntityRepository } from 'typeorm';
+
 import Permission from 'src/entities/permission.entity';
 
 @EntityRepository(Permission)

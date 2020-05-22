@@ -8,11 +8,14 @@ import {
 } from '@nestjs/common';
 import { hash, compare } from 'bcryptjs';
 import { InjectRepository } from '@nestjs/typeorm';
+
 import UsersRepository from './users.repository';
+import RoleRepository from './shared/roles/role.repository';
+import IUserService, { IRequestPatchProfile } from './models/IUserService';
 import ICreateUserDTO from './dtos/ICreateUserDTO';
-import User from '../entities/user.entity';
-import IUserService from './models/IUserService';
 import ILoginDTO from './dtos/IloginDTO';
+
+import User from '../entities/user.entity';
 
 export interface IRequestUpdateProfile {
   user_id: string;
@@ -27,36 +30,89 @@ export default class UsersService implements IUserService {
   constructor(
     @InjectRepository(UsersRepository)
     private readonly usersRepository: UsersRepository,
+    @InjectRepository(RoleRepository)
+    private readonly roleRepository: RoleRepository,
   ) {}
 
   async findAll(): Promise<User[]> {
     return this.usersRepository.find({
-      select: ['id', 'name', 'email', 'created_at', 'updated_at'],
+      select: ['id', 'name', 'email'],
+      relations: ['roles', 'permissions'],
     });
   }
 
-  async findByLogin({ email, password }: ILoginDTO) {
-    const user = await this.usersRepository.findOne({ where: { email } });
+  async validateLoginWithRoles(email: string, password: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { email },
+      relations: ['roles', 'permissions'],
+    });
 
     if (!user) {
-      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+      throw new BadRequestException('User not found');
     }
 
-    if (!(await compare(password, user.password))) {
+    const comparePassword = await compare(password, user.password);
+
+    if (!comparePassword) {
+      throw new BadRequestException('User not found');
+    }
+
+    return user;
+  }
+
+  async validateIdWithRoles(id: string): Promise<User> {
+    return this.usersRepository.findOne(id, {
+      relations: ['roles', 'permissions'],
+    });
+  }
+
+  async findByLogin({ email, password }: ILoginDTO): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    const comparePassword = await compare(password, user.password);
+
+    if (!comparePassword) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     }
 
     return user;
   }
 
-  async findById(id: string): Promise<User> {
+  async findById(user_logged_id: string, id: string): Promise<User> {
+    const findUserLogged = await this.usersRepository.findOne({
+      where: { id: user_logged_id },
+      select: ['id', 'name', 'email'],
+      relations: ['roles', 'permissions'],
+    });
+
     const userExist = await this.usersRepository.findOne({
       where: { id },
-      select: ['id', 'name', 'email', 'created_at', 'updated_at'],
+      select: ['id', 'name', 'email'],
+      relations: ['roles', 'permissions'],
     });
 
     if (!userExist) {
       throw new NotFoundException('User not found');
+    }
+
+    if (findUserLogged.id !== id) {
+      const findRoleByName = userExist.roles.map(role => ({
+        name: role.name,
+      }));
+
+      const [verifyUserAdmin] = findRoleByName.filter(
+        role => role.name === 'Administrator',
+      );
+
+      if (verifyUserAdmin.name === 'Administrator') {
+        throw new BadRequestException();
+      }
     }
 
     return userExist;
@@ -74,23 +130,37 @@ export default class UsersService implements IUserService {
     return userExist;
   }
 
-  async create(user: ICreateUserDTO): Promise<User> {
+  async create({ roles, ...user }: ICreateUserDTO): Promise<User> {
     const userExist = await this.usersRepository.findOne({
       where: { email: user.email },
     });
 
     if (userExist) {
-      throw new UnauthorizedException('User already exist');
+      throw new BadRequestException('User already exist');
     }
 
     user.password = await hash(user.password, 8);
 
     const createUser = this.usersRepository.create(user);
-    // console.log(createUser.);
-    // const roles = this.roleRepository.save({ user: createUser, type:  });
-    const savedUser = await this.usersRepository.save(createUser);
+    const findRoles = await this.roleRepository.findByIds(roles, {
+      relations: ['permissions'],
+    });
 
-    return savedUser;
+    if (!findRoles) {
+      throw new BadRequestException('Roles not found');
+    }
+
+    const [findPermissions] = findRoles.map(role => ({
+      permissions: role.permissions,
+    }));
+
+    if (findPermissions.permissions) {
+      createUser.permissions = findPermissions.permissions;
+    }
+
+    createUser.roles = findRoles;
+
+    return this.usersRepository.save(createUser);
   }
 
   async save({
@@ -131,6 +201,38 @@ export default class UsersService implements IUserService {
       }
 
       user.password = await hash(password, 8);
+    }
+
+    return this.usersRepository.save(user);
+  }
+
+  async updateRoles({
+    user_id: id,
+    roles,
+  }: IRequestPatchProfile): Promise<User> {
+    const user = await this.usersRepository.findOne(id, {
+      relations: ['roles', 'permissions'],
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const findRoles = await this.roleRepository.findByIds(roles, {
+      relations: ['permissions'],
+    });
+
+    if (!findRoles) {
+      throw new BadRequestException('Roles not found');
+    }
+
+    user.roles = findRoles;
+    const [findPermissions] = findRoles.map(role => ({
+      permissions: role.permissions,
+    }));
+
+    if (findPermissions.permissions) {
+      user.permissions = findPermissions.permissions;
     }
 
     return this.usersRepository.save(user);

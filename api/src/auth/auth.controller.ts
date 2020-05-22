@@ -23,7 +23,7 @@ export default class AuthController {
     const user = await this.userService.findByLogin(login);
 
     const payload = {
-      email: user.email,
+      sub: user.id,
     };
 
     const token = await this.authService.login(payload);
